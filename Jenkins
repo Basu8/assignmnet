@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        script {
+          
+          git branch: 'main', url: 'https://github.com/Basu8/assignmnet.git'
+          
+        }
+      }
+    }
+    stage('Build Maven Project') {
+      steps {
+        sh 'mvn clean package' // Assuming your pom.xml is configured correctly
+      }
+    }
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t my-spring-boot-app . '  // Assuming Dockerfile is in project root
+      }
+    }
+    stage('Deploy') { // Simulate deployment by running the container (optional)
+      steps {
+        sh 'docker run -d -p 8080:8080 my-spring-boot-app' // Run container on port 8080
+      }
+    }
+  }
+}
